@@ -1,0 +1,26 @@
+name: CMake
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    # Команды настройки и сборки CMake не зависят от платформы и должны одинаково хорошо работать на Windows или Mac.
+# Вы можете сконвертировать это в матричную сборку, если вам нужно покрытие нескольких платформ.
+# См .: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      # Конфигурирование CMake в подкаталоге 'build'. Параметр CMAKE_BUILD_TYPE необходим только при использовании генератора одно-конфигурационных проектов, например, make.
+# См. https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -S. -B_build -DCMAKE_INSTALL_PREFIX=_install
+
+    - name: Build
+      # Создайте свою программу с данными настройками
+      run: cmake --build _build
+      
+    - name: Install
+      run: cmake --build _build --target install
